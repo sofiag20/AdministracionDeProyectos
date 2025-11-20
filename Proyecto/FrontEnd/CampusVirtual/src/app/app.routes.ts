@@ -18,7 +18,7 @@ export const routes: Routes = [
     {
         path: 'equipo3',
         loadChildren: () =>
-            import('./modules/equipo3/equipo3-routing-module').then((m) => m.Equipo3RoutingModule),
+            import('./modules/equipo3/equipo3-module').then(m => m.Equipo3Module)
     },
     {
         path: 'equipo4',

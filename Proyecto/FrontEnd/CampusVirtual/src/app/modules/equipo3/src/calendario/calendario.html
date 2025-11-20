@@ -1,3 +1,101 @@
-<p>calendario works!</p>
+<!-- BOTÓN REGRESAR -->
+<button class="btn-back" (click)="goBack()">
+  ⬅ Regresar
+</button>
 
+<div class="calendar">
 
+  <!-- COLUMNA IZQUIERDA (ROJA) -->
+  <div class="col leftCol">
+    <div class="content">
+
+      <h1 class="date">
+        {{ months[currentMonth] }}
+        <span>{{ currentYear }}</span>
+      </h1>
+
+      <div class="notes">
+
+        <div *ngIf="selectedEventos.length > 0" class="event-details">
+          <h3 class="details-title">
+            Detalles de los partidos del día
+          </h3>
+
+          <div *ngFor="let ev of selectedEventos" class="event-card">
+            <p><span class="label">Título:</span> {{ ev.titulo }}</p>
+            <p><span class="label">Fecha:</span> {{ ev.fecha }}</p>
+            <p><span class="label">Descripción:</span> {{ ev.descripcion }}</p>
+          </div>
+        </div>
+
+        <!-- SI NO HAY PARTIDOS -->
+        <div *ngIf="selectedEventos.length === 0" class="no-event-msg">
+          <h3 class="details-title">Sin partidos programados</h3>
+          <p style="color:white; font-size:14px; opacity:.8;">
+            No hay actividades deportivas registradas para este día.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- COLUMNA DERECHA (CALENDARIO) -->
+  <div class="col rightCol">
+    <div class="content">
+
+      <h2 class="year">
+        <span class="arrow" (click)="currentYear = currentYear - 1; loadMonth()">&#10094;</span>
+        {{ currentYear }}
+        <span class="arrow" (click)="currentYear = currentYear + 1; loadMonth()">&#10095;</span>
+      </h2>
+
+      <!-- MESES -->
+      <ul class="months" 
+          style="display:flex; justify-content:space-between; width:100%; padding:0;">
+        <li *ngFor="let m of months; let i = index" style="list-style:none;">
+          <a
+            href="javascript:void(0)"
+            [class.selected]="i === currentMonth"
+            (click)="currentMonth = i; loadMonth()"
+            style="display:block; width:32px; text-align:center;"
+          >
+            {{ m }}
+          </a>
+        </li>
+      </ul>
+
+      <!-- DÍAS DE LA SEMANA -->
+      <ul class="weekday"
+          style="display:grid; grid-template-columns:repeat(7,1fr); padding:0;">
+        <li *ngFor="let d of weekDays" 
+            style="list-style:none; text-align:center;">
+          <a>{{ d }}</a>
+        </li>
+      </ul>
+
+      <!-- DÍAS DEL MES -->
+      <ul class="days">
+        <li *ngFor="let d of days">
+
+          <!-- Día vacío -->
+          <a *ngIf="d && d.empty"></a>
+
+          <!-- Día normal -->
+          <a *ngIf="d && !d.empty"
+            [class.selected]="d?.isToday"
+            (click)="openDay(d)">
+
+            {{ d?.day }}
+
+            <!-- PUNTITO SI HAY EVENTOS -->
+            <div *ngIf="d?.eventos" class="event-dot"></div>
+
+          </a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+</div>
